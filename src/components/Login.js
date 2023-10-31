@@ -1,48 +1,138 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { bgImg } from "../Utilits/constants";
 import Header from "./Header";
+import Validate from "./Validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../Utilits/firebase";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUserCredentials } from "../Utilits/userSlice";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
+  const [alertMessage, seterrorMessage] = useState(null);
+  const name = useRef(null);
+  const email = useRef(null);
+  const password = useRef(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleSignIn = () => {
     setIsSignIn(!isSignIn);
+  };
+
+  const handleCredentials = () => {
+    const message = Validate(email.current.value, password.current.value);
+    seterrorMessage(message);
+
+    {
+      !isSignIn &&
+        createUserWithEmailAndPassword(
+          auth,
+          email.current.value,
+          password.current.value
+        )
+          .then((userCredential) => {
+            // Signed up
+            const user = userCredential.user;
+            // ...
+            updateProfile(user, {
+              displayName: name.current.value,
+              photoURL: "https://example.com/jane-q-user/profile.jpg",
+            })
+              .then(() => {
+                const { uid, photoURL, displayName, email } = auth.currentUser;
+                dispatch(
+                  addUserCredentials({
+                    uid: uid,
+                    photoURL: photoURL,
+                    displayName: displayName,
+                    email: email,
+                  })
+                );
+                navigate("/browser");
+              })
+              .catch((error) => {
+                // An error occurred
+                // ...
+                seterrorMessage(error.message);
+              });
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // ..
+            seterrorMessage(errorCode + "-" + errorMessage);
+          });
+    }
+
+    signInWithEmailAndPassword(
+      auth,
+      email.current.value,
+      password.current.value
+    )
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        seterrorMessage(errorCode + "-" + errorMessage);
+      });
   };
 
   return (
     <div>
       <Header />
-      <div className="absolute">
+      <div className="absolute w-screen">
         <img className="" src={bgImg} alt="bgImg" />
       </div>
       <div className="">
-        <form className="absolute  mx-auto  bg-black w-3/12 right-0 left-0 p-12 my-40 rounded-lg bg-opacity-70">
+        <form
+          className="absolute  mx-auto  bg-black w-3/12 right-0 left-0 p-12 my-40 rounded-lg bg-opacity-70"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <h1 className=" text-white font-bold text-3xl my-4">
             {isSignIn ? "Sign IN" : "Sign UP"}
           </h1>
           {!isSignIn && (
             <input
+              ref={name}
               type="text"
               placeholder="Name"
               className="text-white font-bold px-10 p-2 my-4 w-full rounded-lg bg-gray-500"
             />
           )}
           <input
+            ref={email}
             type="email"
             placeholder="Email"
             className="text-white font-bold px-10 p-2 my-4 w-full rounded-lg bg-gray-500"
           />
           <input
+            ref={password}
             type="password"
             placeholder="Password"
             className="text-white font-bold px-10 p-2 my-4 w-full rounded-lg bg-gray-500"
           />
-          <button className="bg-indigo-600 text-white px-10 w-full my-6 p-2 rounded-lg">
-            SignIN
+          <p className="m-2 font-bold text-red-400">{alertMessage}</p>
+          <button
+            className="bg-indigo-600 text-white px-10 w-full my-6 p-2 rounded-lg"
+            onClick={handleCredentials}
+          >
+            {isSignIn ? " Sign IN " : " Sign UP "}
           </button>
           <p className=" text-white m-2 py-10">
-            {!isSignIn ? "New to Netflix? " : "Already a menber "}
+            {isSignIn ? "New to Netflix? " : "Already a member "}
             <span className="font-bold cursor-pointer" onClick={handleSignIn}>
-              {isSignIn ? " Sign IN " : " Sign UP "}
+              {!isSignIn ? " Sign IN " : " Sign UP "}
             </span>
             Now
           </p>
