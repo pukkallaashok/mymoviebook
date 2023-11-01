@@ -13,3 +13,14 @@ export const API_Options = {
       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNTNiMzNiZGM3YzdiOTc1OTRjN2NkNDE2YzdmMjViMSIsInN1YiI6IjY1MzliZmQwMjRmMmNlMDExYzY0OGE4NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.x7IClnNSu2-2ftqn7tZ20Y0yYvk7NlWajvMuW3U7MwQ",
   },
 };
+
+export const cardsImgUrl = "https://image.tmdb.org/t/p/w500";
+
+export const Supported_Language = [
+  { idetifier: "en", langName: "English" },
+  { idetifier: "hindi", langName: "Hindi" },
+  { idetifier: "telugu", langName: "Telugu" },
+  { idetifier: "japanese", langName: "Japanese" },
+];
+
+export const openAI_Key = "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";

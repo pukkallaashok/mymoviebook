@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
-import { API_Options } from "../Utilits/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addMovieTrailer } from "../Utilits/moviesSlice";
 import useMovietrailer from "../Hooks/useMovieTrailer";
 
 const VideoBackground = ({ id }) => {
@@ -18,7 +16,7 @@ const VideoBackground = ({ id }) => {
           "https://www.youtube.com/embed/" +
           TrailerId?.key +
           "?autoplay=1&mute=1"
-        }
+        } //
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

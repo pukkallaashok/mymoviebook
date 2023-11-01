@@ -54,12 +54,11 @@ const Login = () => {
                     email: email,
                   })
                 );
-                navigate("/browser");
               })
               .catch((error) => {
                 // An error occurred
                 // ...
-                seterrorMessage(error.message);
+                seterrorMessage(error);
               });
           })
           .catch((error) => {
@@ -92,52 +91,54 @@ const Login = () => {
     <div>
       <Header />
       <div className="absolute w-screen">
-        <img className="" src={bgImg} alt="bgImg" />
+        <img
+          className="h-screen object-cove w-screen"
+          src={bgImg}
+          alt="bgImg"
+        />
       </div>
-      <div className="">
-        <form
-          className="absolute  mx-auto  bg-black w-3/12 right-0 left-0 p-12 my-40 rounded-lg bg-opacity-70"
-          onSubmit={(e) => e.preventDefault()}
+      <form
+        className="absolute  mx-auto  bg-black w-[70% ] md:w-3/12 right-0 left-0 p-12 my-40 rounded-lg bg-opacity-70"
+        onSubmit={(e) => e.preventDefault()}
+      >
+        <h1 className=" text-white font-bold text-3xl my-4">
+          {isSignIn ? "Sign IN" : "Sign UP"}
+        </h1>
+        {!isSignIn && (
+          <input
+            ref={name}
+            type="text"
+            placeholder="Name"
+            className="text-white font-bold px-10 p-2 my-4 w-full rounded-lg bg-gray-500"
+          />
+        )}
+        <input
+          ref={email}
+          type="email"
+          placeholder="Email"
+          className="text-white font-bold px-10 p-2 my-4 w-full rounded-lg bg-gray-500"
+        />
+        <input
+          ref={password}
+          type="password"
+          placeholder="Password"
+          className="text-white font-bold px-10 p-2 my-4 w-full rounded-lg bg-gray-500"
+        />
+        <p className="m-2 font-bold text-red-400">{alertMessage}</p>
+        <button
+          className="bg-indigo-600 text-white px-10 w-full my-6 p-2 rounded-lg"
+          onClick={handleCredentials}
         >
-          <h1 className=" text-white font-bold text-3xl my-4">
-            {isSignIn ? "Sign IN" : "Sign UP"}
-          </h1>
-          {!isSignIn && (
-            <input
-              ref={name}
-              type="text"
-              placeholder="Name"
-              className="text-white font-bold px-10 p-2 my-4 w-full rounded-lg bg-gray-500"
-            />
-          )}
-          <input
-            ref={email}
-            type="email"
-            placeholder="Email"
-            className="text-white font-bold px-10 p-2 my-4 w-full rounded-lg bg-gray-500"
-          />
-          <input
-            ref={password}
-            type="password"
-            placeholder="Password"
-            className="text-white font-bold px-10 p-2 my-4 w-full rounded-lg bg-gray-500"
-          />
-          <p className="m-2 font-bold text-red-400">{alertMessage}</p>
-          <button
-            className="bg-indigo-600 text-white px-10 w-full my-6 p-2 rounded-lg"
-            onClick={handleCredentials}
-          >
-            {isSignIn ? " Sign IN " : " Sign UP "}
-          </button>
-          <p className=" text-white m-2 py-10">
-            {isSignIn ? "New to Netflix? " : "Already a member "}
-            <span className="font-bold cursor-pointer" onClick={handleSignIn}>
-              {!isSignIn ? " Sign IN " : " Sign UP "}
-            </span>
-            Now
-          </p>
-        </form>
-      </div>
+          {isSignIn ? " Sign IN " : " Sign UP "}
+        </button>
+        <p className=" text-white m-2 py-10">
+          {isSignIn ? "New to Netflix? " : "Already a member "}
+          <span className="font-bold cursor-pointer" onClick={handleSignIn}>
+            {!isSignIn ? " Sign IN " : " Sign UP "}
+          </span>
+          Now
+        </p>
+      </form>
     </div>
   );
 };

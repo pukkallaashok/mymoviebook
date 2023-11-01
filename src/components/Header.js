@@ -4,9 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../Utilits/firebase";
 import { addUserCredentials, removeUser } from "../Utilits/userSlice";
 import { useNavigate } from "react-router-dom";
+import { addAIsearch } from "../Utilits/AISlice";
+import { Supported_Language, logoImg } from "../Utilits/constants";
+import { addLangChange } from "../Utilits/LangSlice";
 
 const Header = () => {
   const user = useSelector((store) => store.user);
+  const toggleAIState = useSelector((store) => store.AIsearch.toggleAIState);
   const dispatch = useDispatch();
   const naviagte = useNavigate();
 
@@ -18,6 +22,13 @@ const Header = () => {
       .catch((error) => {
         naviagte("/error");
       });
+  };
+  const handleLangChange = (e) => {
+    dispatch(addLangChange(e.target.value));
+  };
+
+  const handleAIsearchButton = () => {
+    dispatch(addAIsearch());
   };
 
   useEffect(() => {
@@ -46,22 +57,37 @@ const Header = () => {
     });
   }, []);
   return (
-    <div className="w-screen p-4 absolute z-10 bg-gradient-to-b from-black flex  justify-between">
-      <div className="">
-        <img
-          className="w-52"
-          src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
-          alt="logo"
-        />
-      </div>
-      <div className="m-4">
-        <button
-          className="bg-indigo-600 text-white p-4 rounded-lg font-bold"
-          onClick={handleSignIn}
-        >
-          Sign Out
-        </button>
-      </div>
+    <div className="w-screen p-4 absolute z-10 bg-gradient-to-b from-black flex flex-col md:flex-row justify-between">
+      <img className="w-44  mx-auto md:mx-0" src={logoImg} alt="logo" />
+
+      {user && (
+        <div className="flex md:p-2 pl-24 md:pl-0 text-sm md:text-base">
+          {
+            <select
+              className="p-2 mx-2 bg-gray-600 text-white rounded-lg"
+              onChange={handleLangChange}
+            >
+              {Supported_Language.map((lang) => (
+                <option key={lang.idetifier} value={lang.idetifier}>
+                  {lang.langName}
+                </option>
+              ))}
+            </select>
+          }
+          <button
+            className="bg-indigo-600 text-white p-2 md:p-4 rounded-lg font-bold mx-3 md:mx-2 text-sm md:text-base"
+            onClick={handleAIsearchButton}
+          >
+            {!toggleAIState ? "AI Search" : "Home-Page"}
+          </button>
+          <button
+            className="bg-indigo-600 text-white p-2 md:p-4 rounded-lg font-bold mx-3 md:mx-2 text-sm md:text-base"
+            onClick={handleSignIn}
+          >
+            Sign Out
+          </button>
+        </div>
+      )}
     </div>
   );
 };
