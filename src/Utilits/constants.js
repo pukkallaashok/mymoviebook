@@ -23,4 +23,4 @@ export const Supported_Language = [
   { idetifier: "japanese", langName: "Japanese" },
 ];
 
-export const openAI_Key = "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";
+export const openAI_Key = process.env.React_APP_OPENAI_KEY; //process.env["OPENAI_API_KEY"]

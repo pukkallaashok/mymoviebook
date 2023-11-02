@@ -28,63 +28,61 @@ const Login = () => {
   const handleCredentials = () => {
     const message = Validate(email.current.value, password.current.value);
     seterrorMessage(message);
-
-    {
-      !isSignIn &&
-        createUserWithEmailAndPassword(
-          auth,
-          email.current.value,
-          password.current.value
-        )
-          .then((userCredential) => {
-            // Signed up
-            const user = userCredential.user;
-            // ...
-            updateProfile(user, {
-              displayName: name.current.value,
-              photoURL: "https://example.com/jane-q-user/profile.jpg",
-            })
-              .then(() => {
-                const { uid, photoURL, displayName, email } = auth.currentUser;
-                dispatch(
-                  addUserCredentials({
-                    uid: uid,
-                    photoURL: photoURL,
-                    displayName: displayName,
-                    email: email,
-                  })
-                );
-              })
-              .catch((error) => {
-                // An error occurred
-                // ...
-                seterrorMessage(error);
-              });
+    if (!isSignIn) {
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          // ...
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL: "https://example.com/jane-q-user/profile.jpg",
           })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // ..
-            seterrorMessage(errorCode + "-" + errorMessage);
-          });
+            .then(() => {
+              const { uid, photoURL, displayName, email } = auth.currentUser;
+              dispatch(
+                addUserCredentials({
+                  uid: uid,
+                  photoURL: photoURL,
+                  displayName: displayName,
+                  email: email,
+                })
+              );
+            })
+            .catch((error) => {
+              // An error occurred
+              // ...
+              seterrorMessage(error.message);
+            });
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
+          seterrorMessage("Invalid mailId/password or user already exists");
+        });
+    } else {
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          seterrorMessage("Invalid mail Id or password");
+        });
     }
-
-    signInWithEmailAndPassword(
-      auth,
-      email.current.value,
-      password.current.value
-    )
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        seterrorMessage(errorCode + "-" + errorMessage);
-      });
   };
 
   return (
@@ -98,7 +96,7 @@ const Login = () => {
         />
       </div>
       <form
-        className="absolute  mx-auto  bg-black w-[70% ] md:w-3/12 right-0 left-0 p-12 my-40 rounded-lg bg-opacity-70"
+        className="absolute  mx-auto  bg-black w-[90%] md:w-3/12 right-0 left-0 p-12 my-40 rounded-lg bg-opacity-70"
         onSubmit={(e) => e.preventDefault()}
       >
         <h1 className=" text-white font-bold text-3xl my-4">
@@ -109,24 +107,24 @@ const Login = () => {
             ref={name}
             type="text"
             placeholder="Name"
-            className="text-white font-bold px-10 p-2 my-4 w-full rounded-lg bg-gray-500"
+            className="text-white font-bold px-5 p-2 my-4 w-[90%] md:w-full rounded-lg bg-gray-500"
           />
         )}
         <input
           ref={email}
           type="email"
           placeholder="Email"
-          className="text-white font-bold px-10 p-2 my-4 w-full rounded-lg bg-gray-500"
+          className="text-white font-bold px-5 p-2 my-4 w-[90%] md:w-full rounded-lg bg-gray-500"
         />
         <input
           ref={password}
           type="password"
           placeholder="Password"
-          className="text-white font-bold px-10 p-2 my-4 w-full rounded-lg bg-gray-500"
+          className="text-white font-bold px-5 p-2 my-4 w-[90%] md:w-full rounded-lg bg-gray-500"
         />
         <p className="m-2 font-bold text-red-400">{alertMessage}</p>
         <button
-          className="bg-indigo-600 text-white px-10 w-full my-6 p-2 rounded-lg"
+          className="bg-indigo-600 text-white px-5 w-[90%] md:w-full my-6 p-2 rounded-lg"
           onClick={handleCredentials}
         >
           {isSignIn ? " Sign IN " : " Sign UP "}

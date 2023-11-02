@@ -58,13 +58,13 @@ const Header = () => {
   }, []);
   return (
     <div className="w-screen p-4 absolute z-10 bg-gradient-to-b from-black flex flex-col md:flex-row justify-between">
-      <img className="w-44  mx-auto md:mx-0" src={logoImg} alt="logo" />
+      <img className="w-36 md:w-52  mx-auto md:mx-0" src={logoImg} alt="logo" />
 
       {user && (
         <div className="flex md:p-2 pl-24 md:pl-0 text-sm md:text-base">
-          {
+          {toggleAIState && (
             <select
-              className="p-2 mx-2 bg-gray-600 text-white rounded-lg"
+              className="p-1 mx-1 bg-gray-600 text-white rounded-lg"
               onChange={handleLangChange}
             >
               {Supported_Language.map((lang) => (
@@ -73,15 +73,15 @@ const Header = () => {
                 </option>
               ))}
             </select>
-          }
+          )}
           <button
-            className="bg-indigo-600 text-white p-2 md:p-4 rounded-lg font-bold mx-3 md:mx-2 text-sm md:text-base"
+            className="bg-indigo-600 text-white p-1 md:p-4 rounded-lg font-bold mx-1 md:mx-2 text-sm md:text-base"
             onClick={handleAIsearchButton}
           >
             {!toggleAIState ? "AI Search" : "Home-Page"}
           </button>
           <button
-            className="bg-indigo-600 text-white p-2 md:p-4 rounded-lg font-bold mx-3 md:mx-2 text-sm md:text-base"
+            className="bg-indigo-600 text-white p-1 md:p-4 rounded-lg font-bold mx-1 md:mx-2 text-sm md:text-base"
             onClick={handleSignIn}
           >
             Sign Out

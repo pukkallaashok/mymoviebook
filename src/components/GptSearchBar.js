@@ -27,7 +27,7 @@ const GptSearchBar = () => {
       searchText.current.value +
       ",give the list of 5 movies with coma separate like example given above. Example: Hit,Hit-2,Major,Goodachari,Vikram";
 
-    const getResults = await openai.chat.completions.create({
+    const getResults = await openai.chat?.completions.create({
       messages: [{ role: "user", content: GptContent }],
       model: "gpt-3.5-turbo",
     });
@@ -53,12 +53,12 @@ const GptSearchBar = () => {
       >
         <input
           ref={searchText}
-          className="p-4 m-4 col-span-9 rounded-lg"
+          className="p-2 md:p-4 m-2 md:m-4 col-span-9 rounded-lg"
           type="text"
           placeholder={lang[langType].Description}
         />
         <button
-          className="py-2 px-4 bg-indigo-600 rounded-lg col-span-3 m-4 font-bold text-white"
+          className=" py-1 md:py-2 px-2 md:px-4 bg-indigo-600 rounded-lg col-span-3 m-4 font-bold text-white"
           onClick={handleGPTSearch}
         >
           {lang[langType].search}
