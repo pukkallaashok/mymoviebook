@@ -7,7 +7,7 @@ const MainContainer = () => {
   const movies = useSelector((store) => store.movies?.TopRated);
   if (!movies) return;
 
-  const mainMovie = movies.length ? movies[8] : movies[0];
+  const mainMovie = movies.length ? movies[9] : movies[0];
 
   const { original_title, overview, id } = mainMovie;
   return (
